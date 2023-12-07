@@ -90,6 +90,26 @@ func ParkCar(car *Car, targetX, targetY float64) {
 	SetExitTime(car)
 }
 
+func moveCar(car *Car) {
+	if car.Position.X < 100 && car.Lane == -1 && !car.IsEntering {
+		moveCarTowardsEntrance(car)
+	} else if car.Lane != -1 && !car.isParked {
+		parkCar(car)
+	}
+}
+
+func moveCarTowardsEntrance(car *Car) {
+	car.Position.X += 10
+	if car.Position.X > 100 {
+		car.Position.X = 100
+	}
+}
+func parkCar(car *Car) {
+	laneWidth := 600.0 / 10
+	targetX, targetY := calculateParkingPosition(car.Lane, laneWidth)
+	ParkCar(car, targetX, targetY)
+}
+
 func removeCar(index int) {
 	Cars = append(Cars[:index], Cars[index+1:]...)
 }
